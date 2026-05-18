@@ -5,7 +5,7 @@
 namespace Maison_Sucree.Services.ShoppingCartAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class addshoppingcarttables : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -22,6 +22,33 @@ namespace Maison_Sucree.Web.Controllers
             return View();
         }
 
+        [HttpGet]
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> Dashboard()
+        {
+            var response = await _orderService.GetAllOrders("");
+            var orders = new List<OrderHeaderDto>();
+
+            if (response != null && response.IsSuccess)
+                orders = JsonConvert.DeserializeObject<List<OrderHeaderDto>>(Convert.ToString(response.Result));
+
+            var vm = new AdminDashboardViewModel
+            {
+                TotalOrders         = orders.Count,
+                TotalRevenue        = orders.Where(o => o.Status == SD.Status_Approved || o.Status == SD.Status_Completed).Sum(o => o.OrderTotal),
+                TotalCustomers      = orders.Select(o => o.UserId).Distinct().Count(),
+                ActiveOrders        = orders.Count(o => o.Status == SD.Status_Approved || o.Status == SD.Status_ReadyForPickup),
+                PendingCount        = orders.Count(o => o.Status == SD.Status_Pending),
+                ApprovedCount       = orders.Count(o => o.Status == SD.Status_Approved),
+                ReadyForPickupCount = orders.Count(o => o.Status == SD.Status_ReadyForPickup),
+                CompletedCount      = orders.Count(o => o.Status == SD.Status_Completed),
+                CancelledCount      = orders.Count(o => o.Status == SD.Status_Cancelled),
+                RecentOrders        = orders.OrderByDescending(o => o.OrderHeaderId).Take(5).ToList()
+            };
+
+            return View(vm);
+        }
+
 
         [HttpGet]
         public IActionResult GetAll(string status)
@@ -90,10 +117,13 @@ namespace Maison_Sucree.Web.Controllers
             if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Status updated successfully";
-                return RedirectToAction(nameof(OrderDetail), new { orderId =orderId });
             }
-            return View();
-            
+            else
+            {
+                TempData["error"] = "Error updating status";
+            }
+            return RedirectToAction(nameof(OrderDetail), new { orderId = orderId });
+
         }
          
 
@@ -104,10 +134,12 @@ namespace Maison_Sucree.Web.Controllers
             if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Status updated successfully";
-                return RedirectToAction(nameof(OrderDetail), new { orderId = orderId });
             }
-            return View();
-
+            else
+            {
+                TempData["error"] = "Error updating status";
+            }
+            return RedirectToAction(nameof(OrderDetail), new { orderId = orderId });
         }
 
 
@@ -117,10 +149,13 @@ namespace Maison_Sucree.Web.Controllers
             var response = await _orderService.UpdateOrderStatus(orderId, SD.Status_Cancelled);
             if (response != null && response.IsSuccess)
             {
-                TempData["success"] = "Status updated successfully";
-                return RedirectToAction(nameof(OrderDetail), new { orderId = orderId });
+                TempData["success"] = "Order cancelled successfully";
             }
-            return View();
+            else
+            {
+                TempData["error"] = "Order cancelled but refund failed";
+            }
+            return RedirectToAction(nameof(OrderDetail), new { orderId = orderId });
         }
         
     }

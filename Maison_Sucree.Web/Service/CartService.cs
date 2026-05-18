@@ -23,7 +23,15 @@ namespace Maison_Sucree.Web.Service
             });
         }
 
-        
+        public async Task<ResponseDto?> ClearCartAsync(string userId)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = userId,
+                Url = SD.ShoppingCartAPIBase + "/api/cart/ClearCart"
+            });
+        }
 
         public async Task<ResponseDto?> GetCartByUserIdAsync(string userId)
         {

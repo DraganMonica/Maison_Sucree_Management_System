@@ -5,7 +5,6 @@ using Maison_Sucree.Services.OrderAPI.Models.Dto;
 using Maison_Sucree.Services.OrderAPI.Service.IService;
 using Maison_Sucree.Services.OrderAPI.Utility;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Stripe;

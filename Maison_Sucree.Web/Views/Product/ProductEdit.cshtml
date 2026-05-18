@@ -45,7 +45,7 @@
                 <label class="control-label pt-2" style="font-size:20px;">Price</label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Price" class=" form-control" />
+                <input asp-for="Price" class="form-control" step="0.01" type="number" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
 

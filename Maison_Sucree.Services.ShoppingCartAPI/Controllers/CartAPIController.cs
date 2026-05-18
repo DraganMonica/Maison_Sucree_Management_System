@@ -7,9 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-
 namespace Maison_Sucree.Services.ShoppingCartAPI.Controllers
 {
     [Route("api/cart")]
@@ -40,21 +37,9 @@ namespace Maison_Sucree.Services.ShoppingCartAPI.Controllers
         {
             try
             {
-                /*var userId = GetUserId();
-                var cartHeader = await _db.CartHeaders.FirstOrDefaultAsync(u => u.UserId == userId);
-
-
-                if (cartHeader == null)
-                {
-                    _response.Result = new CartDto();
-                    return _response;
-                }
-                */
                 CartDto cart = new()
                 {
-                    //CartHeader = _mapper.Map<CartHeaderDto>(cartHeader),
                     CartHeader=_mapper.Map<CartHeaderDto>(_db.CartHeaders.First(u=>u.UserId== userId)),
-                    //CartDetails = _mapper.Map<IEnumerable<CartDetailsDto>>(_db.CartDetails.Where(u => u.CartHeaderId == cartHeader.CartHeaderId))
                 };
                 cart.CartDetails = _mapper.Map<IEnumerable<CartDetailsDto>>(_db.CartDetails.Where(u => u.CartHeaderId == cart.CartHeader.CartHeaderId));
 
@@ -117,14 +102,7 @@ namespace Maison_Sucree.Services.ShoppingCartAPI.Controllers
         {
             try
             {
-                /*var userId = GetUserId();
                 
-                if (string.IsNullOrEmpty(userId))
-                {
-                    _response.IsSuccess = false;
-                    _response.Message = "User ID is NULL!";
-                    return _response;
-                }*/
                 var cartHeaderFromDb = await _db.CartHeaders.AsNoTracking().FirstOrDefaultAsync(u => u.UserId == cartDto.CartHeader.UserId);
 
                 if (cartHeaderFromDb == null)
@@ -205,23 +183,28 @@ namespace Maison_Sucree.Services.ShoppingCartAPI.Controllers
             return _response;
         }
 
-        
-
-
-        /*private string GetUserId()
+        [HttpPost("ClearCart")]
+        public async Task<ResponseDto> ClearCart([FromBody] string userId)
         {
-            // Pentru JWT (dacă vine Bearer token)
-            var jwtSub = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
-            if (!string.IsNullOrEmpty(jwtSub))
-                return jwtSub;
+            try
+            {
+                var cartHeader = await _db.CartHeaders.FirstOrDefaultAsync(u => u.UserId == userId);
+                if (cartHeader != null)
+                {
+                    var cartDetails = _db.CartDetails.Where(u => u.CartHeaderId == cartHeader.CartHeaderId);
+                    _db.CartDetails.RemoveRange(cartDetails);
+                    _db.CartHeaders.Remove(cartHeader);
+                    await _db.SaveChangesAsync();
+                }
+                _response.Result = true;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
 
-            // Pentru Cookie authentication (claim-ul Sub din cookie)
-            var cookieSub = User.FindFirst("sub")?.Value;
-            if (!string.IsNullOrEmpty(cookieSub))
-                return cookieSub;
-
-            // Fallback
-            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        }*/
     }
 }

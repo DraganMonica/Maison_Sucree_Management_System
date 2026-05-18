@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Maison_Sucree.Services.ProductAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260217060646_addProducts")]
-    partial class addProducts
+    [Migration("20260225082712_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,8 +40,10 @@ namespace Maison_Sucree.Services.ProductAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageLocalPath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -96,7 +98,7 @@ namespace Maison_Sucree.Services.ProductAPI.Migrations
                         {
                             ProductId = 5,
                             CategoryName = "Cake",
-                            Description = "Mini prăjituri rafinate cu straturi delicate de mousse de căpșuni și cremă fină de vanilie, decorate elegant pentru un aspect premium. Desert perfect pentru evenimente speciale sau momente dulci sofisticate.",
+                            Description = "Mini prăjituri rafinate cu straturi delicate de mousse de căpșuni și cremă fină de vanilie, decorate elegant pentru un aspect premium.",
                             ImageUrl = "/images/products/strawberry_vanilla_squares.png",
                             Name = "Strawberry Vanilla Petit Squares",
                             Price = 10.5

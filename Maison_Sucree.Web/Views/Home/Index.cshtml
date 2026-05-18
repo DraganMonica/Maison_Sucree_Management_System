@@ -1,24 +1,31 @@
 ﻿@model IEnumerable<ProductDto>
 
+<!-- Banner -->
+<div class="text-center py-5 mb-4" style="background: linear-gradient(135deg, #fff5f5, #ffe0e0); border-radius: 16px;">
+    <h1 style="color:#EB6864; font-weight:700; font-size:2.5rem;">Bine ați venit la Maison Sucrée</h1>
+    <p class="text-muted fs-5 mt-2">Descoperă lumea noastră de dulciuri artizanale — făcute cu pasiune, servite cu drag.</p>
+    <span style="font-size:2rem;">🍰🍫🍬</span>
+</div>
+
 <form>
-    <div class="container row">
+    <div class="container row product-row">
         @foreach (var product in Model)
         {
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="p-0 my-3 border rounded">
-                    <div class="card">
-                        <h3 class="card-title text-white-50 text-center py-2">@product.Name</h3>
-                        <img src="@product.ImageUrl" class="card-img-top">
+            <div class="col-12 col-md-6 col-lg-4 product-col my-3">
+                <div class="border rounded h-100">
+                    <div class="card h-100">
+                        <h3 class="card-title text-center py-2 fw-semibold" style="color:#EB6864;">@product.Name</h3>
+                        <img src="@product.ImageUrl" class="card-img-top" style="height:220px; object-fit:cover;">
                         <div class="card-body">
                             <div class="d-flex justify-content-between py-2">
-                                <span class="text-danger" style="font-size:20px;">@string.Format("{0:c}", product.Price)</span>
-                                <span class="badge bg-success text-white px-4 py-2 fs-5 rounded-pill fw-semibold">@product.CategoryName</span>
+                                <span class="fw-bold" style="font-size:20px; color:#212529;">@string.Format("{0:c}", product.Price)</span>
+                                <span class="badge badge-pink px-4 py-2 fs-5 rounded-pill fw-semibold">@product.CategoryName</span>
                             </div>
                             <p class="card-text">@Html.Raw(product.Description)</p>
-                            <div class="row">
+                            <div class="row mt-auto">
                                 <div class="col">
                                     <a asp-action="ProductDetails" asp-route-productId="@product.ProductId"
-                                       class="btn btn-success form-control">Details</a>
+                                       class="btn btn-pink-outline form-control">Add</a>
                                 </div>
                             </div>
                         </div>

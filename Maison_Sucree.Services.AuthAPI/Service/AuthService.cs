@@ -94,8 +94,12 @@ namespace Maison_Sucree.Services.AuthAPI.Service
                 var result = await _userManager.CreateAsync(user, registrationRequestDto.Password);
                 if (result.Succeeded)
                 {
-                    var userToReturn = _db.ApplicationUsers.First(u => u.UserName == registrationRequestDto.Email);
+                    if (!_roleManager.RoleExistsAsync("CUSTOMER").GetAwaiter().GetResult())
+                        _roleManager.CreateAsync(new IdentityRole("CUSTOMER")).GetAwaiter().GetResult();
 
+                    await _userManager.AddToRoleAsync(user, "CUSTOMER");
+
+                    var userToReturn = _db.ApplicationUsers.First(u => u.UserName == registrationRequestDto.Email);
 
                     UserDto userDto = new()
                     {

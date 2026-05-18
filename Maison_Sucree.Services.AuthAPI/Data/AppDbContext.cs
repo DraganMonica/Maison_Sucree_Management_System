@@ -1,8 +1,6 @@
-﻿
-using Maison_Sucree.Services.AuthAPI.Models;
+﻿using Maison_Sucree.Services.AuthAPI.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Maison_Sucree.Services.AuthAPI.Models;
 
 namespace Maison_Sucree.Services.AuthAPI.Data
 {

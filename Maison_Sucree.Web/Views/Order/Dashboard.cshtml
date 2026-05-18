@@ -1,0 +1,238 @@
+@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<style>
+    .stat-card {
+        border: none;
+        border-radius: 14px;
+        padding: 1.5rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+    .stat-card:hover { transform: translateY(-3px); }
+    .stat-card .icon {
+        font-size: 2.8rem;
+        opacity: 0.25;
+        position: absolute;
+        right: 1.2rem;
+        top: 1rem;
+    }
+    .stat-card .label { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.85; }
+    .stat-card .value { font-size: 2rem; font-weight: 700; margin-top: 0.25rem; }
+
+    .bg-rose    { background: linear-gradient(135deg, #EB6864, #c94f4b); }
+    .bg-teal    { background: linear-gradient(135deg, #20c997, #12a07a); }
+    .bg-indigo  { background: linear-gradient(135deg, #6610f2, #4a0db5); }
+    .bg-orange  { background: linear-gradient(135deg, #fd7e14, #e06200); }
+
+    .section-title {
+        font-size: 1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #6c757d;
+        margin-bottom: 1rem;
+    }
+    .chart-card {
+        border: none;
+        border-radius: 14px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        padding: 1.5rem;
+    }
+    .table-card {
+        border: none;
+        border-radius: 14px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        overflow: hidden;
+    }
+    .table-card .table { margin-bottom: 0; }
+    .table-card thead th {
+        background-color: #fff5f5;
+        color: #EB6864;
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border: none;
+        padding: 1rem 1.2rem;
+    }
+    .table-card tbody td { padding: 0.9rem 1.2rem; vertical-align: middle; border-color: #f8f9fa; }
+    .table-card tbody tr:hover { background-color: #fff8f8; }
+
+    .status-badge {
+        padding: 0.35em 0.75em;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    .badge-approved      { background: #d1fae5; color: #065f46; }
+    .badge-completed     { background: #dbeafe; color: #1e40af; }
+    .badge-readyforpickup{ background: #fef3c7; color: #92400e; }
+    .badge-cancelled     { background: #fee2e2; color: #991b1b; }
+    .badge-pending       { background: #f3f4f6; color: #374151; }
+
+    .page-header { margin-bottom: 2rem; }
+    .page-header h2 { font-weight: 700; color: #1f2937; }
+    .page-header p  { color: #6c757d; margin: 0; }
+</style>
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h2><i class="bi bi-speedometer2 me-2" style="color:#EB6864;"></i>Admin Dashboard</h2>
+        <p>Overview of your store's performance</p>
+    </div>
+</div>
+
+<!-- STAT CARDS -->
+<div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card bg-rose">
+            <i class="bi bi-currency-dollar icon"></i>
+            <div class="label">Total Revenue</div>
+            <div class="value">@string.Format("{0:N2} RON", Model.TotalRevenue)</div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card bg-teal">
+            <i class="bi bi-bag-check icon"></i>
+            <div class="label">Total Orders</div>
+            <div class="value">@Model.TotalOrders</div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card bg-indigo">
+            <i class="bi bi-people icon"></i>
+            <div class="label">Total Customers</div>
+            <div class="value">@Model.TotalCustomers</div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card bg-orange">
+            <i class="bi bi-hourglass-split icon"></i>
+            <div class="label">Active Orders</div>
+            <div class="value">@Model.ActiveOrders</div>
+        </div>
+    </div>
+</div>
+
+<!-- CHARTS -->
+<div class="row g-3 mb-4">
+    <div class="col-12 col-lg-5">
+        <div class="chart-card h-100">
+            <div class="section-title">Order Status Distribution</div>
+            <div style="position:relative; height:280px;">
+                <canvas id="donutChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-7">
+        <div class="chart-card h-100">
+            <div class="section-title">Orders by Status</div>
+            <div style="position:relative; height:280px;">
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- RECENT ORDERS TABLE -->
+<div class="mb-2 section-title">Recent Orders</div>
+<div class="table-card">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.RecentOrders.Any())
+            {
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">No orders yet.</td>
+                </tr>
+            }
+            @foreach (var order in Model.RecentOrders)
+            {
+                var badgeClass = order.Status switch
+                {
+                    "Approved"       => "badge-approved",
+                    "Completed"      => "badge-completed",
+                    "ReadyForPickup" => "badge-readyforpickup",
+                    "Cancelled"      => "badge-cancelled",
+                    _                => "badge-pending"
+                };
+                <tr>
+                    <td class="fw-semibold text-muted">#@order.OrderHeaderId</td>
+                    <td class="fw-semibold">@order.Name</td>
+                    <td class="text-muted" style="font-size:0.875rem;">@order.Email</td>
+                    <td class="fw-bold">@string.Format("{0:N2} RON", order.OrderTotal)</td>
+                    <td><span class="status-badge @badgeClass">@order.Status</span></td>
+                    <td>
+                        <a asp-action="OrderDetail" asp-route-orderId="@order.OrderHeaderId"
+                           class="btn btn-sm" style="color:#EB6864; font-size:0.8rem;">
+                            View <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+    const labels  = ['Approved', 'Ready for Pickup', 'Completed', 'Cancelled'];
+    const counts  = [@Model.ApprovedCount, @Model.ReadyForPickupCount, @Model.CompletedCount, @Model.CancelledCount];
+    const colors  = ['#10b981', '#f59e0b', '#3b82f6', '#ef4444'];
+    const borders = ['#059669', '#d97706', '#2563eb', '#dc2626'];
+
+    // Donut
+    new Chart(document.getElementById('donutChart'), {
+        type: 'doughnut',
+        data: { labels, datasets: [{ data: counts, backgroundColor: colors, borderColor: borders, borderWidth: 2, hoverOffset: 8 }] },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { padding: 16, font: { size: 12 } } }
+            },
+            cutout: '65%'
+        }
+    });
+
+    // Bar
+    new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [{
+                label: 'Number of Orders',
+                data: counts,
+                backgroundColor: colors,
+                borderColor: borders,
+                borderWidth: 1.5,
+                borderRadius: 6,
+                borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f3f4f6' } },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+</script>
+}

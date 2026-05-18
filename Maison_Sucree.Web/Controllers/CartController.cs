@@ -89,8 +89,13 @@ namespace Maison_Sucree.Web.Controllers
 
             if (response != null && response.IsSuccess)
             {
-                // trebuie sa deserializez obiectul
                 OrderHeaderDto orderHeader = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));
+
+                // ← GOLEȘTE COȘUL indiferent de status
+                var userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)
+                                 ?.FirstOrDefault()?.Value;
+                await _cartService.ClearCartAsync(userId);
+
                 if (orderHeader.Status == SD.Status_Approved)
                 {
                     return View(orderId);

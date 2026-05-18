@@ -7,7 +7,7 @@
 namespace Maison_Sucree.Services.CouponAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCouponToDb : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

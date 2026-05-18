@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Maison_Sucree.Web.Models;
 using Maison_Sucree.Web.Service.IService;
@@ -9,10 +8,10 @@ using Maison_Sucree.Web.Utility;
 using Newtonsoft.Json;
 //using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Threading.Tasks;
+
 using System.IdentityModel.Tokens.Jwt;
 
-namespace Mon_Doux.Web.Controllers
+namespace Maison_Sucree.Web.Controllers
 {
     public class AuthController : Controller
     {
@@ -72,33 +71,17 @@ namespace Mon_Doux.Web.Controllers
         public async Task<IActionResult> Register(RegistrationRequestDto obj)
         {
             ResponseDto result = await _authService.RegisterAsync(obj);
-            ResponseDto assignRole;
 
             if (result != null && result.IsSuccess)
             {
-                if (string.IsNullOrEmpty(obj.Role))
-                {
-                    obj.Role = SD.RoleCustomer;
-                }
-                assignRole = await _authService.AssignRoleAsync(obj);
-                if (result != null && assignRole.IsSuccess)
-                {
-                    TempData["success"] = "Registration Successful";
-                    return RedirectToAction(nameof(Login));
-                }
+                TempData["success"] = "Registration Successful";
+                return RedirectToAction(nameof(Login));
             }
             else
             {
-                TempData["error"] = result.Message;
+                TempData["error"] = result?.Message ?? "Registration failed. Please try again.";
             }
 
-            var roleList = new List<SelectListItem>()
-            {
-                new SelectListItem{Text=SD.RoleAdmin, Value=SD.RoleAdmin},
-                new SelectListItem{Text=SD.RoleCustomer, Value=SD.RoleCustomer}
-            };
-
-            ViewBag.RoleList = roleList;
             return View(obj);
         }
 

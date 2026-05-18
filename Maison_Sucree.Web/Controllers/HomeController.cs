@@ -1,5 +1,6 @@
 using Maison_Sucree.Web.Models;
 using Maison_Sucree.Web.Service.IService;
+using Maison_Sucree.Web.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,9 @@ namespace Maison_Sucree.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
+            if (User.IsInRole(SD.RoleAdmin))
+                return RedirectToAction("Dashboard", "Order");
+
             List<ProductDto>? list = new();
 
             ResponseDto? response = await _productService.GetAllProductsAsync();

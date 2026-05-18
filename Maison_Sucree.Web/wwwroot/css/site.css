@@ -18,5 +18,46 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  margin-bottom: 120px;
+}
+
+/* carduri egale ca inaltime */
+.product-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+.product-col {
+  display: flex;
+  flex-direction: column;
+}
+.product-col .card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.product-col .card .card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.product-col .card .card-body .card-text {
+  flex: 1;
+}
+
+/* badge categorie roz */
+.badge-pink {
+  background-color: transparent;
+  border: 2px solid #EB6864;
+  color: #EB6864;
+}
+
+/* buton details roz */
+.btn-pink-outline {
+  border: 2px solid #EB6864;
+  color: #EB6864;
+  background-color: transparent;
+}
+.btn-pink-outline:hover {
+  background-color: #EB6864;
+  color: white;
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Maison_Sucree.Services.OrderAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260219113212_AddOrderTables")]
-    partial class AddOrderTables
+    [Migration("20260225082906_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
