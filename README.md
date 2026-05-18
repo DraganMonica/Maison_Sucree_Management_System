@@ -1,9 +1,12 @@
 <div align="center">
 
-
 <img src="Maison_Sucree.Web/wwwroot/images/logo_ms.png" width="150" />
-#  Maison Sucrée
-### *Artisan Pastry E-Commerce — Microservices Architecture*
+
+# 🍰 Maison Sucrée
+
+### *Demo Artisan Pastry E-Commerce Platform — ASP.NET Core Microservices Architecture*
+
+<br/>
 
 [![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
 [![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core-Web_API_+_MVC-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://learn.microsoft.com/aspnet/core)
@@ -13,8 +16,11 @@
 [![Ocelot](https://img.shields.io/badge/Ocelot-API_Gateway-00ADEF?style=for-the-badge)](https://ocelot.readthedocs.io)
 [![Chart.js](https://img.shields.io/badge/Chart.js-Admin_Dashboard-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white)](https://www.chartjs.org)
 
-**A full-stack e-commerce platform for an artisan pastry shop, built on a microservices architecture.**
-Browse products, manage your cart, apply coupons, and pay securely — all powered by 6 independent .NET services.
+<br/>
+
+### Full-stack demo e-commerce platform for an artisan pastry shop, built using a microservices architecture.
+
+Browse products, manage your cart, apply coupons, complete Stripe payments, and manage orders through a business-style admin dashboard powered by 6 independent .NET services.
 
 </div>
 
