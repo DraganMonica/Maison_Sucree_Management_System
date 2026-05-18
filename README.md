@@ -1,6 +1,7 @@
 <div align="center">
 
 # 🍰 Maison Sucrée
+<img src="Maison_Sucree.Web/wwwroot/images/logo_ms.png" width="150" />
 
 ### *Artisan Pastry E-Commerce — Microservices Architecture*
 
