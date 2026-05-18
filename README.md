@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🍰 Maison Sucrée
-<img src="Maison_Sucree.Web/wwwroot/images/logo_ms.png" width="150" />
 
+<img src="Maison_Sucree.Web/wwwroot/images/logo_ms.png" width="150" />
+#  Maison Sucrée
 ### *Artisan Pastry E-Commerce — Microservices Architecture*
 
 [![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
@@ -21,7 +21,7 @@ Browse products, manage your cart, apply coupons, and pay securely — all power
 ---
 
 > [!NOTE]
-> This is an academic project built to demonstrate microservices architecture, API Gateway routing, distributed JWT authentication, real-world Stripe payment integration, and an analytics admin dashboard with Chart.js.
+> This is a demo project built to demonstrate microservices architecture, API Gateway routing, distributed JWT authentication, real-world Stripe payment integration, and an analytics admin dashboard with Chart.js.
 
 ---
 
@@ -52,7 +52,7 @@ Browse products, manage your cart, apply coupons, and pay securely — all power
 
 ## 🎯 Overview
 
-**Maison Sucrée** is a complete e-commerce web application for an artisan pastry shop. Customers browse handcrafted products, add items to a shopping cart, apply discount coupons, and complete purchases through Stripe-powered checkout. Administrators manage products, coupons, and the full order lifecycle from a dedicated analytics dashboard.
+**Maison Sucrée** is a demo microservices-based e-commerce platform for an artisan pastry shop. Customers browse handcrafted products, add items to a shopping cart, apply discount coupons, and complete purchases through Stripe-powered checkout. Administrators manage products, coupons, and the full order lifecycle from a dedicated analytics dashboard.
 
 The application is decomposed into **6 independent microservices**, each owning its own database and communicating through a centralized **Ocelot API Gateway**. Authentication is handled via distributed **JWT tokens**, and payments are processed through **Stripe Checkout Sessions**.
 
@@ -124,9 +124,6 @@ In Maison Sucrée, each service maps directly to a **bounded business domain**:
 | `CouponAPI` | Discount & promotions |
 | `ShoppingCartAPI` | Cart state management |
 | `OrderAPI` | Order lifecycle & payments |
-
-> [!IMPORTANT]
-> If `OrderAPI` goes down, customers can still browse products and manage their cart. If `ProductAPI` needs to scale during a product launch, only that container scales — the rest are untouched.
 
 ---
 
@@ -368,7 +365,7 @@ All databases use SQL Server LocalDB. Each `Program.cs` calls `ApplyMigration()`
 
 ## 📊 Admin Dashboard
 
-A modern analytics dashboard accessible at `/Order/Dashboard` (ADMIN only), built with **Chart.js** and Bootstrap.
+A demo business-style analytics dashboard accessible at `/Order/Dashboard` (ADMIN only), built with **Chart.js** and Bootstrap.
 
 ### Stat Cards
 | Card | Calculation |
